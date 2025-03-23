@@ -132,7 +132,7 @@ multigame.onStart("ending", function () {
         4444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
         `)
     tiles.setCurrentTilemap(tilemap`nivel4`)
-    tioVilaSprite = sprites.create(img`
+    tioVilaEndingSprite = sprites.create(img`
         ..............................
         ..............................
         ..............................
@@ -164,8 +164,8 @@ multigame.onStart("ending", function () {
         ..............................
         ..............................
         `, SpriteKind.Player)
-    tioVilaSprite.setPosition(15, 90)
-    story.spriteSayText(tioVilaSprite, "No puedo más")
+    tioVilaEndingSprite.setPosition(15, 90)
+    story.spriteSayText(tioVilaEndingSprite, "No puedo más")
     encantaSprite = sprites.create(img`
         ................
         .....eeeeee.....
@@ -690,7 +690,6 @@ multigame.onStart("game", function () {
     )
     tioVilaSprite.setPosition(15, 90)
     tioVilaSprite.ay = aceleracionSalto
-    story.spriteSayText(tioVilaSprite, "Te llevaré al rio")
     pause(1000)
     initGame = true
 })
@@ -837,7 +836,9 @@ multigame.onUpdateInterval("game", randint(1000, 2000), function () {
     }
 })
 info.onScore(20, function () {
-    IrFase("game", "ending")
+    if (initGame) {
+        IrFase("game", "ending")
+    }
 })
 function RoleCredits () {
     effects.starField.startScreenEffect()
@@ -1460,6 +1461,7 @@ let tiburon: Sprite = null
 let enemyRandom = 0
 let textSprite2: TextSprite = null
 let tempBackground: Image = null
+let tioVilaSprite: Sprite = null
 let velocidadScroll = 0
 let aceleracionSalto = 0
 let velocidadSalto = 0
@@ -1468,7 +1470,7 @@ let encantaStorySprite: Sprite = null
 let princesaStoryImg: Image = null
 let reyStoryImg: Image = null
 let encantaSprite: Sprite = null
-let tioVilaSprite: Sprite = null
+let tioVilaEndingSprite: Sprite = null
 let initGame = false
 let fase = ""
 multigame.startGame("menu")
