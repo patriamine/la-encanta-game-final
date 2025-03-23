@@ -694,17 +694,17 @@ multigame.onStart("game", function () {
     initGame = true
 })
 function RandomizeImage (background: Image) {
-    tempBackground = background
-    for (let index = 0; index <= 14; index++) {
-        tempBackground.replace(index, randint(0, 14))
-    }
-    scroller.setBackgroundScrollOffset(0, 0)
-    scene.setBackgroundImage(tempBackground)
-    timer.after(3000, function () {
-        if (initGame) {
-            RandomizeImage(background)
+    if (initGame) {
+        tempBackground = background
+        for (let index = 0; index <= 14; index++) {
+            tempBackground.replace(index, randint(0, 14))
         }
-    })
+        scroller.setBackgroundScrollOffset(0, 0)
+        scene.setBackgroundImage(tempBackground)
+        timer.after(3000, function () {
+            RandomizeImage(background)
+        })
+    }
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
     sprites.destroy(otherSprite)
@@ -830,7 +830,7 @@ multigame.onUpdateInterval("game", randint(1000, 2000), function () {
             arana.setPosition(160, 65)
         }
     }
-    if (info.score() >= 15 && !(pesadilla)) {
+    if (info.score() >= 12 && !(pesadilla)) {
         pesadilla = true
         RandomizeImage(scene.backgroundImage())
     }
