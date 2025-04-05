@@ -1,3 +1,6 @@
+namespace SpriteKind {
+    export const a = SpriteKind.create()
+}
 function comenzarFaseMenu () {
     fase = "menu"
     scene.setBackgroundImage(img`
@@ -312,21 +315,23 @@ function comenzarFaseRio () {
         ..............................
         ..............................
         `, SpriteKind.Player)
-    tioVilaEndingSprite.changeScale(1.2, ScaleAnchor.Middle)
+    tioVilaEndingSprite.setPosition(17, 87)
     animation.runImageAnimation(
     tioVilaEndingSprite,
-    assets.animation`myAnim`,
+    assets.animation`tiovilasuelo`,
     2000,
     true
     )
-    tioVilaEndingSprite.setPosition(17, 87)
+    tioVilaEndingSprite.changeScale(1.2, ScaleAnchor.Middle)
     encantaSprite = sprites.create(assets.image`encanta_mala`, SpriteKind.Player)
     encantaSprite.setPosition(60, 90)
-    story.startCutscene(function () {
-        story.spriteSayText(tioVilaEndingSprite, "No puedo más")
-        story.spriteSayText(encantaSprite, "Te maldigo por no romper mi encantamiento. Morirás arrastrando la lengua.")
-    })
-    timer.after(11000, function () {
+    textSprite3 = textsprite.create("Te maldigo por no romper", 1, 15)
+    textSprite3.setPosition(80, 30)
+    textSprite3 = textsprite.create("mi encantamiento. Morirás", 1, 15)
+    textSprite3.setPosition(80, 38)
+    textSprite5 = textsprite.create("arrastrando la lengua.", 1, 15)
+    textSprite5.setPosition(80, 46)
+    timer.after(8000, function () {
         TerminarFaseRio()
         comenzarFaseFinal()
     })
@@ -345,9 +350,8 @@ function RandomizeImage (background: Image) {
     }
 }
 function TerminarFaseRio () {
-    story.cancelCurrentCutscene()
-    sprites.destroy(tioVilaEndingSprite)
-    sprites.destroy(encantaSprite)
+    sprites.destroyAllSpritesOfKind(SpriteKind.Player)
+    sprites.destroyAllSpritesOfKind(SpriteKind.Text)
     tiles.setCurrentTilemap(tilemap`empty`)
     scroller.setBackgroundScrollOffset(0, 0)
 }
@@ -503,15 +507,9 @@ function comenzarFaseFinal () {
     pause(2000)
     comenzarFaseCreditos()
 }
-info.onScore(3, function () {
-    if (fase == "juego") {
-        TerminarFaseJuego()
-        comenzarFaseRio()
-    }
-})
 function TerminarFaseJuego () {
-    sprites.destroyAllSpritesOfKind(SpriteKind.Projectile)
     sprites.destroyAllSpritesOfKind(SpriteKind.Player)
+    sprites.destroyAllSpritesOfKind(SpriteKind.Projectile)
     info.setLife(null)
     info.setScore(0)
     pesadilla = false
@@ -684,6 +682,12 @@ function comenzarFaseCreditos () {
     RoleCredits()
     game.reset()
 }
+info.onScore(20, function () {
+    if (fase == "juego") {
+        TerminarFaseJuego()
+        comenzarFaseRio()
+    }
+})
 function comenzarFaseHistoria () {
     fase = "historia"
     scene.setBackgroundImage(img`
@@ -1226,9 +1230,9 @@ function comenzarFaseJuego (modo: string) {
     )
     tioVilaSprite.setPosition(15, 90)
     tioVilaSprite.ay = aceleracionSalto
-    story.startCutscene(function () {
-        story.spriteSayText(tioVilaSprite, "Te salvaré")
-    })
+    // story.startCutscene(function () {
+    // story.spriteSayText(tioVilaSprite, "Te salvaré")
+    // })
     pesadilla = false
     timer.after(500, function () {
         fase = modo
@@ -1257,6 +1261,8 @@ let velocidadSalto = 0
 let tioVilaSprite: Sprite = null
 let tempBackground: Image = null
 let pesadilla = false
+let textSprite5: TextSprite = null
+let textSprite3: TextSprite = null
 let encantaSprite: Sprite = null
 let tioVilaEndingSprite: Sprite = null
 let myMenu: miniMenu.MenuSprite = null
@@ -1369,7 +1375,7 @@ game.onUpdateInterval(randint(1500, 2500), function () {
             arana.setPosition(160, 65)
         }
     }
-    if (info.score() >= 15 && !(pesadilla)) {
+    if (info.score() >= 14 && !(pesadilla)) {
         pesadilla = true
         RandomizeImage(scene.backgroundImage())
     }
